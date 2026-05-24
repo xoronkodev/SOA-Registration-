@@ -13,7 +13,6 @@ from PIL import Image
 def send_registration_email(details, subjects, marks, receipt_file):
     """Sends an isolated, detailed email report for a single applicant."""
     MY_EMAIL = "khanzada212008@gmail.com"
-    # IMPORTANT: Generate a 16-character Google App Password for this string!
     MY_PASSWORD = "whyv rtdf odiq hsgc" 
 
     msg = MIMEMultipart()
@@ -21,8 +20,9 @@ def send_registration_email(details, subjects, marks, receipt_file):
     msg['To'] = MY_EMAIL
     msg['Subject'] = f"🎓 SOA Registration: {details['Name']} ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
     
-    # Format chosen subjects into a clean readable block
-    subject_string = "\n".join([f" - {s}" for s in subjects])
+    # Filter out any "None" strings so your email report only shows real choices
+    clean_subjects = [s for s in subjects if "None" not in s]
+    subject_string = "\n".join([f" - {s}" for s in clean_subjects])
     
     body = f"""
     A new candidate has successfully registered for Superior Officers Academy.
@@ -45,14 +45,13 @@ def send_registration_email(details, subjects, marks, receipt_file):
     """
     msg.attach(MIMEText(body, 'plain'))
     
-    # Securely package and attach the uploaded image/document
     if receipt_file is not None:
         payload = MIMEBase('application', 'octet-stream')
         payload.set_payload(receipt_file.read())
         encoders.encode_base64(payload)
         payload.add_header('Content-Disposition', f'attachment; filename={receipt_file.name}')
         msg.attach(payload)
-        receipt_file.seek(0) # Reset stream pointer for Streamlit display
+        receipt_file.seek(0)
 
     try:
         server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -74,12 +73,9 @@ def main():
     st.title("🏛️ SUPERIOR OFFICERS ACADEMY (SOA)")
     st.markdown("#### Official Candidate Registration Portal")
     
-    # EasyPaisa Notification Banner
     st.warning("💳 **Fee Notice:** Kindly deposit your registration fee into the **EasyPaisa Account: 03365464411** before filling out this form.")
-    
     st.write("---")
     
-    # Creating a full form container to prevent site refreshes mid-input
     with st.form(key="soa_form"):
         st.subheader("👤 Step 1: Necessary Personal Details")
         
@@ -98,73 +94,51 @@ def main():
         st.subheader("📚 Step 2: Subject Selection")
         st.info("Select one subject from each group you wish to take. Your **Total Marks Score must equal exactly 600** to qualify.")
         
-        # Track selections and cumulative mark calculations
+        # Track selections and cumulative mark calculations safely
         selected_subjects = []
         total_marks = 0
         
         # GROUP 1 (200 Marks)
-
         g1_choice = st.selectbox("Select subject from Group 1", ["None", "Accounting & Auditing", "Economics", "Computer Science", "Political Science", "International Relations"])
-        selected_subjects.append(f"{g1_choice} (200m)")
-        total_marks += 200
-        if g1_choice == "None":
+        if g1_choice != "None":
             selected_subjects.append(f"{g1_choice} (200m)")
-            total_marks +=0
-            
-
+            total_marks += 200
             
         # GROUP 2 (200 Marks)
-        
-        g2_choice = st.selectbox("Select subject from Group 2", [ "None","Physics", "Chemistry", "Applied Mathematics", "Pure Mathematics", "Statistics", "Geology"])
-        selected_subjects.append(f"{g2_choice} (200m)")
-        total_marks += 200
-        if g2_choice == "None":
-            selected_subjects.append(f"{g1_choice} (200m)")
-            total_marks +=0
+        g2_choice = st.selectbox("Select subject from Group 2", ["None", "Physics", "Chemistry", "Applied Mathematics", "Pure Mathematics", "Statistics", "Geology"])
+        if g2_choice != "None":
+            selected_subjects.append(f"{g2_choice} (200m)")
+            total_marks += 200
             
         # GROUP 3 (100 Marks)
-        
         g3_choice = st.selectbox("Select subject from Group 3", ["None", "Business Administration", "Public Administration", "Governance & Public Policy", "Town Planning & Urban Management"])
-        selected_subjects.append(f"{g3_choice} (100m)")
-        total_marks += 100
-        if g3_choice == "None":
-            selected_subjects.append(f"{g1_choice} (200m)")
-            total_marks +=0
+        if g3_choice != "None":
+            selected_subjects.append(f"{g3_choice} (100m)")
+            total_marks += 100
             
         # GROUP 4 (100 Marks)
-        
-        g4_choice = st.selectbox("Select subject from Group 4", ["None" , "History of Pakistan & India", "Islamic History & Culture", "British History", "European History", "History of USA"])
-        selected_subjects.append(f"{g4_choice} (100m)")
-        total_marks += 100
-        if g4_choice == "None":
-            selected_subjects.append(f"{g1_choice} (200m)")
-            total_marks +=0
+        g4_choice = st.selectbox("Select subject from Group 4", ["None", "History of Pakistan & India", "Islamic History & Culture", "British History", "European History", "History of USA"])
+        if g4_choice != "None":
+            selected_subjects.append(f"{g4_choice} (100m)")
+            total_marks += 100
             
         # GROUP 5 (100 Marks)
-        
         g5_choice = st.selectbox("Select subject from Group 5", ["None", "Gender Studies", "Environmental Science", "Agriculture & Forestry", "Botany", "Zoology", "English Literature", "Urdu Literature"])
-        selected_subjects.append(f"{g5_choice} (100m)")
-        total_marks += 100
-        if g5_choice == "None":
-            selected_subjects.append(f"{g1_choice} (200m)")
-            total_marks +=0
+        if g5_choice != "None":
+            selected_subjects.append(f"{g5_choice} (100m)")
+            total_marks += 100
 
         # GROUP 6 (100 Marks)
-        
         g6_choice = st.selectbox("Select subject from Group 6", ["None", "Law", "Constitutional Law", "International Law", "Muslim Law & Jurisprudence", "Mercantile Law", "Criminology", "Philosophy"])
-        selected_subjects.append(f"{g6_choice} (100m)")
-        total_marks += 100
-        if g6_choice == "None":
-            selected_subjects.append(f"{g1_choice} (200m)")
-            total_marks +=0
+        if g6_choice != "None":
+            selected_subjects.append(f"{g6_choice} (100m)")
+            total_marks += 100
 
         # GROUP 7 (100 Marks)
         g7_choice = st.selectbox("Select subject from Group 7", ["None", "Journalism and Mass Communication", "Psychology", "Geography", "Anthropology", "Sociology", "Punjabi", "Sindhi", "Balochi", "Pashto", "Persian", "Arabic"])
-        selected_subjects.append(f"{g7_choice} (100m)")
-        total_marks += 100
-        if g7_choice == "None":
-            selected_subjects.append(f"{g1_choice} (200m)")
-            total_marks +=0
+        if g7_choice != "None":
+            selected_subjects.append(f"{g7_choice} (100m)")
+            total_marks += 100
 
         # Show a real-time tracking metric counter
         st.metric(label="Current Opted Subject Marks Counter", value=f"{total_marks} / 600 Marks")
@@ -183,17 +157,14 @@ def main():
     # 3. COMPLIANCE & ACCURACY CHECK
     # -------------------------------------------------------------------------
     if submit_btn:
-        # Mandatory validation checks
         if not name or not father_name or not email or not qualification or not uploaded_receipt:
             st.error("🚨 Missing Required Fields! Please complete all text fields and upload your receipt before submitting.")
         
-        # Enforcing your explicit 600-mark validation rule
         elif total_marks < 600:
             st.error(f"❌ Failed Compliance: Your total opted subject marks value is {total_marks}. This is less than the compulsory 600 marks. Please alter your choices and submit again.")
         elif total_marks > 600:
             st.error(f"❌ Failed Compliance: Your total opted subject marks value is {total_marks}. This exceeds the compulsory 600 marks limits. Please alter your choices and submit again.")
         
-        # If everything passes perfectly
         else:
             with st.spinner("Encrypting details and processing database upload..."):
                 candidate_data = {
@@ -201,7 +172,6 @@ def main():
                     "Qualification": qualification, "CSS_Attempts": css_attempts, "PMS_Attempts": pms_attempts
                 }
                 
-                # Fire the isolated alert to your personal inbox
                 email_sent = send_registration_email(candidate_data, selected_subjects, total_marks, uploaded_receipt)
                 
                 if email_sent:
