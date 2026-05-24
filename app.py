@@ -104,44 +104,67 @@ def main():
         
         # GROUP 1 (200 Marks)
 
-        g1_choice = st.selectbox("Select subject from Group 1", ["Accounting & Auditing", "Economics", "Computer Science", "Political Science", "International Relations"])
+        g1_choice = st.selectbox("Select subject from Group 1", ["None", "Accounting & Auditing", "Economics", "Computer Science", "Political Science", "International Relations"])
         selected_subjects.append(f"{g1_choice} (200m)")
         total_marks += 200
+        if g1_choice == "None":
+            selected_subjects.append(f"{g1_choice} (200m)")
+            total_marks +=0
+            
+
             
         # GROUP 2 (200 Marks)
         
-        g2_choice = st.selectbox("Select subject from Group 2", ["Physics", "Chemistry", "Applied Mathematics", "Pure Mathematics", "Statistics", "Geology"])
+        g2_choice = st.selectbox("Select subject from Group 2", [ "None","Physics", "Chemistry", "Applied Mathematics", "Pure Mathematics", "Statistics", "Geology"])
         selected_subjects.append(f"{g2_choice} (200m)")
         total_marks += 200
+        if g2_choice == "None":
+            selected_subjects.append(f"{g1_choice} (200m)")
+            total_marks +=0
             
         # GROUP 3 (100 Marks)
         
-        g3_choice = st.selectbox("Select subject from Group 3", ["Business Administration", "Public Administration", "Governance & Public Policy", "Town Planning & Urban Management"])
+        g3_choice = st.selectbox("Select subject from Group 3", ["None", "Business Administration", "Public Administration", "Governance & Public Policy", "Town Planning & Urban Management"])
         selected_subjects.append(f"{g3_choice} (100m)")
         total_marks += 100
+        if g3_choice == "None":
+            selected_subjects.append(f"{g1_choice} (200m)")
+            total_marks +=0
             
         # GROUP 4 (100 Marks)
         
-        g4_choice = st.selectbox("Select subject from Group 4", ["History of Pakistan & India", "Islamic History & Culture", "British History", "European History", "History of USA"])
+        g4_choice = st.selectbox("Select subject from Group 4", ["None" , "History of Pakistan & India", "Islamic History & Culture", "British History", "European History", "History of USA"])
         selected_subjects.append(f"{g4_choice} (100m)")
         total_marks += 100
+        if g4_choice == "None":
+            selected_subjects.append(f"{g1_choice} (200m)")
+            total_marks +=0
             
         # GROUP 5 (100 Marks)
         
-        g5_choice = st.selectbox("Select subject from Group 5", ["Gender Studies", "Environmental Science", "Agriculture & Forestry", "Botany", "Zoology", "English Literature", "Urdu Literature"])
+        g5_choice = st.selectbox("Select subject from Group 5", ["None", "Gender Studies", "Environmental Science", "Agriculture & Forestry", "Botany", "Zoology", "English Literature", "Urdu Literature"])
         selected_subjects.append(f"{g5_choice} (100m)")
         total_marks += 100
+        if g5_choice == "None":
+            selected_subjects.append(f"{g1_choice} (200m)")
+            total_marks +=0
 
         # GROUP 6 (100 Marks)
         
-        g6_choice = st.selectbox("Select subject from Group 6", ["Law", "Constitutional Law", "International Law", "Muslim Law & Jurisprudence", "Mercantile Law", "Criminology", "Philosophy"])
+        g6_choice = st.selectbox("Select subject from Group 6", ["None", "Law", "Constitutional Law", "International Law", "Muslim Law & Jurisprudence", "Mercantile Law", "Criminology", "Philosophy"])
         selected_subjects.append(f"{g6_choice} (100m)")
         total_marks += 100
+        if g6_choice == "None":
+            selected_subjects.append(f"{g1_choice} (200m)")
+            total_marks +=0
 
         # GROUP 7 (100 Marks)
-        g7_choice = st.selectbox("Select subject from Group 7", ["Journalism and Mass Communication", "Psychology", "Geography", "Anthropology", "Sociology", "Punjabi", "Sindhi", "Balochi", "Pashto", "Persian", "Arabic"])
+        g7_choice = st.selectbox("Select subject from Group 7", ["None", "Journalism and Mass Communication", "Psychology", "Geography", "Anthropology", "Sociology", "Punjabi", "Sindhi", "Balochi", "Pashto", "Persian", "Arabic"])
         selected_subjects.append(f"{g7_choice} (100m)")
         total_marks += 100
+        if g7_choice == "None":
+            selected_subjects.append(f"{g1_choice} (200m)")
+            total_marks +=0
 
         # Show a real-time tracking metric counter
         st.metric(label="Current Opted Subject Marks Counter", value=f"{total_marks} / 600 Marks")
